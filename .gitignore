@@ -1,0 +1,13 @@
+# Vscode
+*.code-workspace
+.vscode/
+
+# Python and venv
+__pycache__/
+*.pyc
+.git/
+bin/
+include/
+lib/
+lib64
+*.cfg
