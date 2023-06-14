@@ -12,7 +12,7 @@ env:
 
 jobs:
 
-  code check:
+  lint:
 
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +47,7 @@ jobs:
   push:
 
     runs-on: ubuntu-lates
-    
+
     steps:
       - name: Push To ${{ env.REGISTRY }}
         uses: redhat-actions/push-to-registry@v2
