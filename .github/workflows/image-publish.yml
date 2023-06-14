@@ -51,7 +51,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           image: ${{ env.IMAGE_NAME }}
-          tags: v1 ${{ github.sha }}
+          tags: ${{ github.sha }}
           containerfiles: |
             ./Containerfile
           # build-args: |
@@ -61,7 +61,7 @@ jobs:
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ env.IMAGE_NAME }}
-          tags: ${{ steps.build-image.outputs.image }}
+          tags: ${{ github.sha }}
           registry: ${{ env.REGISTRY }}
           # username: quay-user
           # password: ${{ secrets.REGISTRY_PASSWORD }}
