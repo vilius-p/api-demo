@@ -23,7 +23,7 @@ jobs:
 
 
   build:
-
+    needs: lint
     runs-on: ubuntu-latest
     # permissions:
     #   contents: read
@@ -46,7 +46,8 @@ jobs:
 
   push:
 
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
+    needs: [lint, build]
 
     steps:
       - name: Push To ${{ env.REGISTRY }}
