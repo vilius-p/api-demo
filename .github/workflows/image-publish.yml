@@ -40,12 +40,12 @@ jobs:
       #     buildah build -t ${{ env.IMAGE_NAME }} Containerfile .
       #     buildah images
 
-      - name: Log in to ${{ env.REGISTRY }}
-        uses: redhat-actions/podman-login@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-          registry: ${{ env.REGISTRY }}
+      # - name: Log in to ${{ env.REGISTRY }}
+      #   uses: redhat-actions/podman-login@v1
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+      #     registry: ${{ env.REGISTRY }}
 
       - name: Buildah Action
         uses: redhat-actions/buildah-build@v2
@@ -63,6 +63,8 @@ jobs:
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ github.sha }}
           registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           # username: quay-user
           # password: ${{ secrets.REGISTRY_PASSWORD }}
 
