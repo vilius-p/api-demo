@@ -6,8 +6,6 @@ app = FastAPI()
 
 
 @app.get("/hello")
-@latency.time()
-@num_err.count_exceptions()
 async def hello():
     return "Hello Telia"
 
@@ -27,11 +25,11 @@ def get_health():
     return {"status": "healthy"}
 
 
-@app.get("/metrics")
-def get_metrics():
-    # Expose Prometheus metrics
-    # return Response(prometheus_client.generate_latest(), media_type="text/plain")
-    return generate_latest(metrics_reg)
+# @app.get("/metrics")
+# def get_metrics():
+#     # Expose Prometheus metrics
+#     # return Response(prometheus_client.generate_latest(), media_type="text/plain")
+#     return generate_latest(metrics_reg)
 
 
 if __name__ == "__main__":
