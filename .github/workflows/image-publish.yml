@@ -7,10 +7,21 @@ on:
 env:
   REGISTRY: docker.io/papavilius
   IMAGE_NAME: api-demo
-  IMAGE_TAG: ${{ github.job }}
+  IMAGE_TAG: ${{ github.run_number }}
 
 
 jobs:
+
+  code check:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: rickstaa/action-black@v1
+        with:
+          black_args: ". --check"
+
+
   build:
 
     runs-on: ubuntu-latest
@@ -33,6 +44,9 @@ jobs:
           containerfiles: |
             ./Containerfile
 
+  push:
+
+    runs-on: ubuntu-latest
       - name: Push To ${{ env.REGISTRY }}
         uses: redhat-actions/push-to-registry@v2
         with:
