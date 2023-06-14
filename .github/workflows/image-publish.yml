@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: docker.io/papavilius
   IMAGE_NAME: api-demo
-  IMAGE_TAG: ${{ github.run_number }}
+  IMAGE_TAG: ${{ github.run_number }}, latest
 
 
 jobs:
