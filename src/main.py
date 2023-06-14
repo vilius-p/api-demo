@@ -55,6 +55,7 @@ def get_metrics():
     # return Response(prometheus_client.generate_latest(), media_type="text/plain")
     return generate_latest(metrics_reg)
 
+
 if __name__ == "__main__":
     import uvicorn
 
