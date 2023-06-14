@@ -2,7 +2,7 @@ FROM python:3.9.17-slim-bullseye
 
 WORKDIR /app
 
-COPY src .
+COPY src src
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN ls -la . && pwd && ls -la /app
