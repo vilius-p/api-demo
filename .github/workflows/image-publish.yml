@@ -38,6 +38,7 @@ jobs:
           pwd
           ls -la
           buildah build -t ${{ env.IMAGE_TAG }} Containerfile .
+          buildah images
 
 
       # # Workaround: https://github.com/docker/build-push-action/issues/461
@@ -56,7 +57,7 @@ jobs:
 
       - name: Push to registry ${{ env.REGISTRY }}
         run: |
-          docker push papavilius/vilius-test:${{ env.IMAGE_TAG }} 
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
 
 
       # # Extract metadata (tags, labels) for Docker
