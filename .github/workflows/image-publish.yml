@@ -37,7 +37,7 @@ jobs:
         run: |
           pwd
           ls -la
-          buildah build -t ${{ env.IMAGE_TAG }} Containerfile .
+          buildah build -t ${{ env.IMAGE_NAME }} Containerfile .
           buildah images
 
 
