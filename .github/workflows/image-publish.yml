@@ -56,7 +56,7 @@ jobs:
 
       - name: Push to registry ${{ env.REGISTRY }}
         run: |
-        docker push papavilius/vilius-test:${{ env.IMAGE_TAG }} 
+          docker push papavilius/vilius-test:${{ env.IMAGE_TAG }} 
 
 
       # # Extract metadata (tags, labels) for Docker
