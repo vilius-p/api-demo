@@ -36,7 +36,7 @@ jobs:
         run: |
           pwd
           ls -la
-          buildah build -t my-test-image Containerfile .
+          buildah build -t api-image Containerfile .
 
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
@@ -60,6 +60,12 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ github.actor }}/app:latest
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
