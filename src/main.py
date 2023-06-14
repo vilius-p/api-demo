@@ -21,9 +21,11 @@ async def get_quote():
     else:
         return {"error": "Failed to fetch the quote"}
 
+
 @app.get("/health")
 def get_health():
     return {"status": "healthy"}
+
 
 @app.get("/metrics")
 def get_metrics():
