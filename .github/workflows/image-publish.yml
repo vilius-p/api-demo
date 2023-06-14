@@ -62,7 +62,7 @@ jobs:
         with:
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ steps.build-image.outputs.image }}
-          # registry: quay.io/quay-user
+          registry: ${{ env.REGISTRY }}
           # username: quay-user
           # password: ${{ secrets.REGISTRY_PASSWORD }}
 
