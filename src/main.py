@@ -21,7 +21,6 @@ async def hello(request: Request):
 @app.get("/quote")
 @limiter.limit("10/minute")
 async def get_quote(request: Request, response: Response):
-    # response = requests.get("https://zenquotes.io/api/today")
     response = requests.get("https://zenquotes.io/api/random")
     if response.status_code == 200:
         return response.json()
@@ -30,7 +29,8 @@ async def get_quote(request: Request, response: Response):
 
 
 @app.get("/health")
-def get_health():
+@limiter.limit("5/minute")
+def get_health(request: Request):
     return {"status": "healthy"}
 
 
