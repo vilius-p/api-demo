@@ -13,6 +13,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 Instrumentator().instrument(app).expose(app)
 
+
 @app.get("/hello")
 @limiter.limit("5/minute")
 async def hello(request: Request):
