@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY src src
 COPY requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 RUN ls -la . && pwd && ls -la /app
 
