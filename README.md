@@ -3,7 +3,6 @@
 This demo is made to showcase a basic API microservice written in python, using FastAPI and Uvicorn. The API includes monitoring, visualized on a grafana dashboard.
 
 [API](http://telia.demo.vilius.xyz)
-![build](https://github.com/vilius-p/api-demo/actions/workflows/image-publish/badge.svg)
 [Grafana](https://grafana.demo.vilius.xyz/)
 
 
