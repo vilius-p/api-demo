@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik
+    logging:
+      options:
+        max-size: "5M"
+    restart: unless-stopped
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    command:
+      - --api.insecure=false
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=DEBUG
+      - --accesslog=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=true
+      - --providers.docker.network=docker_web
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secured.address=:443
+      - --providers.file.filename=/dynamic.yaml
+      - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true
+      - --certificatesresolvers.mytlschallenge.acme.email=vilius.dt@gmail.com
+      - --certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json
+    volumes:
+      - ./traefik-storage/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-storage/dynamic.yaml:/dynamic.yaml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`demo.vilius.xyz`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.middlewares=redirect@file"
+      - "traefik.http.routers.api-secured.rule=Host(`demo.vilius.xyz`)"
+      - "traefik.http.routers.api-secured.service=api@internal"
+      - "traefik.http.routers.api-secured.entrypoints=web-secured"
+      - "traefik.http.routers.api-secured.tls.certresolver=mytlschallenge"
+  demo-api:
+    container_name: demo-api
+    image: papavilius/api-demo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.telia-demo.rule=Host(`telia.demo.vilius.xyz`)"
+      - "traefik.http.routers.telia-demo.entrypoints=web"
+      - "traefik.http.routers.telia-demo.middlewares=redirect@file"
+      - "traefik.http.routers.telia-demo-secured.rule=Host(`telia.demo.vilius.xyz`)"
+      - "traefik.http.routers.telia-demo-secured.entrypoints=web-secured"
+      - "traefik.http.routers.telia-demo-secured.tls.certresolver=mytlschallenge"
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.demo.vilius.xyz`)"
+      - "traefik.http.routers.prometheus.entrypoints=web"
+      - "traefik.http.routers.prometheus.middlewares=redirect@file"
+      - "traefik.http.routers.prometheus-secured.rule=Host(`prometheus.demo.vilius.xyz`)"
+      - "traefik.http.routers.prometheus-secured.entrypoints=web-secured"
+      - "traefik.http.routers.prometheus-secured.tls.certresolver=mytlschallenge"
+    volumes:
+      - ./prometheus_data/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    user: '1001'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.demo.vilius.xyz`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.routers.grafana.middlewares=redirect@file"
+      - "traefik.http.routers.grafana-secured.rule=Host(`grafana.demo.vilius.xyz`)"
+      - "traefik.http.routers.grafana-secured.entrypoints=web-secured"
+      - "traefik.http.routers.grafana-secured.tls.certresolver=mytlschallenge"
+    volumes:
+      - ./grafana_data/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana_data:/var/lib/grafana
+    environment:
+      - GF_PATHS_CONFIG=/etc/grafana/grafana.ini

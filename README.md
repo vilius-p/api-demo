@@ -1,19 +1,49 @@
-# Prometheus FastAPI Instrumentator <!-- omit in toc -->
-
-[![Quote]](http://telia.demo.vilius.xyz:8000/quote)
-[![python-versions](https://img.shields.io/pypi/pyversions/prometheus-fastapi-instrumentator.svg)](https://pypi.python.org/pypi/prometheus-fastapi-instrumentator)
-[![downloads](https://pepy.tech/badge/prometheus-fastapi-instrumentator/month)](https://pepy.tech/project/prometheus-fastapi-instrumentator/month)
-[![build](https://img.shields.io/github/actions/workflow/status/trallnag/kubestatus2cloudwatch/ci.yaml?branch=master)](https://github.com/trallnag/kubestatus2cloudwatch/actions)
-[![codecov](https://codecov.io/gh/trallnag/prometheus-fastapi-instrumentator/branch/master/graph/badge.svg)](https://codecov.io/gh/trallnag/prometheus-fastapi-instrumentator)
-
 # API Demo
 
-This demo is made to showcase a basic API microservice written in python. 
+This demo is made to showcase a basic API microservice written in python, using FastAPI and Uvicorn. The API includes monitoring, visualized on a grafana dashboard.
 
-http://telia.demo.vilius.xyz:8000/quote
+[API](http://telia.demo.vilius.xyz)
+![build](https://github.com/vilius-p/api-demo/actions/workflows/image-publish/badge.svg)
+[Grafana](https://grafana.demo.vilius.xyz/)
 
-## to run
-uvicorn main:app --reload
-curl http://vilius.xyz:8000/quote
 
-oas 3.0 ??
+## Prerequisites
+
+- docker-compose
+
+## Endpoints
+
+- GET /hello: Returns "Hello Telia. Limited to 5/min
+
+- GET /quote: Returns random quote JSON. Limited to 10/min
+
+- GET /health: Returns if service is healthy. Limited to 5/min
+
+- GET /metrics: Returns metrics for prometheus.
+
+
+
+## Quick start
+
+To call the endpoints:
+```
+curl -L telia.demo.vilius.xyz/hello
+```
+```
+curl -L telia.demo.vilius.xyz/quote
+```
+
+## Local implementation
+It is possible to run the solution locally. For this please modify:
+```
+grafana_data/grafana.ini
+```
+Where 
+```
+domain = <YOUR_DOMAIN.COM>
+```
+
+To build solution locally:
+```
+docker-compose up -d
+```
