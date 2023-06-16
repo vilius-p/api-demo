@@ -1,17 +1,26 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from prometheus_fastapi_instrumentator import Instrumentator
 import requests
 
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 @app.get("/hello")
-async def hello():
+@limiter.limit("5/minute")
+async def hello(request: Request):
     return "Hello Telia"
 
 
 @app.get("/quote")
-async def get_quote():
+@limiter.limit("10/minute")
+async def get_quote(request: Request, response: Response):
     # response = requests.get("https://zenquotes.io/api/today")
     response = requests.get("https://zenquotes.io/api/random")
     if response.status_code == 200:
@@ -23,13 +32,6 @@ async def get_quote():
 @app.get("/health")
 def get_health():
     return {"status": "healthy"}
-
-
-# @app.get("/metrics")
-# def get_metrics():
-#     # Expose Prometheus metrics
-#     # return Response(prometheus_client.generate_latest(), media_type="text/plain")
-#     return generate_latest(metrics_reg)
 
 
 if __name__ == "__main__":
